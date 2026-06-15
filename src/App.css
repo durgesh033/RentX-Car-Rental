@@ -36,6 +36,9 @@ nav {
 
 nav h2 {
   color : cyan;
+  font-size: 30px;
+  font-weight: bold;
+  text-shadow: 0 0 30px rgb(17, 114, 114);
 }
 
 .hero {
