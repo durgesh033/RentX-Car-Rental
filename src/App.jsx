@@ -155,6 +155,48 @@ function App() {
           </div>
         </div>
       </section>
+      
+      <section className='testimonials'>
+        <div className='testimonial-header'>
+          <p>CUSTOMER REVIEWS</p>
+          <h2>What Our Customers Say</h2>
+        </div>
+
+        <div className='testimonial-grid'>
+          <div className='testimonial-card'>
+            <div className='stars'>⭐⭐⭐⭐⭐</div>
+
+            <p>Renting a Ferrari was effortless. The booking process was smooth and the car arrived in pristine condition</p>
+
+            <div className='customer'>
+              <h4>Rahul Sharma</h4>
+              <span>Mumbai</span>
+            </div>
+          </div>
+
+          <div className='testimonial-card'>
+            <div className='stars'>⭐⭐⭐⭐⭐</div>
+
+            <p>The best luxury car rental experience I've ever had. Transparent pricing and excellent support.</p>
+
+            <div className='customer'>
+              <h4>Priya Patel</h4>
+              <span>Bangalore</span>
+            </div>
+          </div>
+
+          <div className='testimonial-card'>
+            <div className='stars'>⭐⭐⭐⭐⭐</div>
+
+            <p>Booked a Porsche for a weekend trip. Everything from pickup to return was perfectly managed.</p>
+            <div className='customer'>
+              <h4>Arjun Singh</h4>
+              <span>Delhi</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
 
     </div>
