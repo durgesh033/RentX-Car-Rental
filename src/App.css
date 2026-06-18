@@ -80,7 +80,7 @@ nav h2 {
 
 .hero-content h1 {
   text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-  font-size: 5rem;
+  font-size: 4.5rem;
   line-height: 1.1;
 }
 
@@ -135,6 +135,24 @@ nav h2 {
   padding: 60px 30px;
 }
 
+.featured-header{
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.featured-tag{
+  color: cyan;
+  font-size: 1rem;
+  letter-spacing: 3px;
+  margin-bottom: 15px;
+}
+
+.featured-subtitle{
+  color: #888;
+  margin-top: 15px;
+  font-size: 1.1rem;
+}
+
 .featured h2 {
   text-align: center;
   font-size: 3rem;
@@ -155,6 +173,8 @@ nav h2 {
   overflow: hidden;
   transition: transform 0.4s ease;
   cursor: pointer;
+  box-shadow: 0 10px 40px rgba(255, 255, 255, 0.05);
+  border: 1 px solid rgba(255, 255, 255, 0.05);
 }
 
 .car-card img{
@@ -182,6 +202,25 @@ nav h2 {
   margin-bottom: 12px;
 }
 
+.car-header small {
+  color: #ffffff;
+  letter-spacing: 2px;
+  font-size: 0.7rem;
+}
+
+.car-header span{
+  width: 35px;
+  height: 35px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
 .car-specs{
   display: flex;
   gap: 10px;
@@ -205,11 +244,23 @@ nav h2 {
 
 .car-card:hover{
   transform: translateY(-15px);
+  box-shadow: 0 20px 60px rgba(0, 255, 255, 0.15);
 }
 
 .car-card:hover img{
   transform: scale(1.1);
   transition: transform 0.4s ease;
+}
+
+.price span{
+  font-size: 0.7rem;
+  color: #888;
+  letter-spacing: 2px
+}
+
+.price h4{
+  color: white;
+  font-size: 1.3rem;
 }
 
 .why{

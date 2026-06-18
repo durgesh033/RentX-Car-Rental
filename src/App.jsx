@@ -45,24 +45,37 @@ function App() {
 
       <section className='featured'>
 
-        <h2>Featured Vehicles</h2>
+        <div className='featured-header'>
+          <p className='featured-tag'>PREMIUM COLLECTION</p>  
+          <h2>Featured Vehicles</h2>
+          <p className='featured-subtitle'>
+            Explore our handpicked selection of luxury cars, performance and exotic vehicles, available for rent to elevate your driving experience.
+          </p>
+        </div>
 
         <div className='car-grid'>
           <div className='car-card'>
             <img src="https://imgd.aeplcdn.com/664x374/n/cw/ec/49376/f8-tributo-exterior-right-rear-three-quarter.jpeg?q=80" alt="Car 1" />
             <div className='car-overlay'>
               <div className='car-header'>
-                <h3>Ferrari F8</h3>
+                <div>
+                  <small>FERRARI</small>
+                  <h3>F8 Tributo</h3>
+                </div>
                 <span>♥</span>
               </div>
 
               <div className='car-specs'>
                 <span>Automatic</span>
                 <span>Petrol</span>
+                <span>710 HP</span>
               </div>
 
               <div className='car-footer'>
-                <h4>$500/day</h4>
+                <div className='price'>
+                  <span>FROM</span>
+                  <h4>$500/day</h4>
+                </div>
                 <button>Rent Now</button>
               </div>
             </div>
@@ -71,17 +84,24 @@ function App() {
             <img src="https://www.lamborghini.com/sites/it-en/files/DAM/lamborghini/masterpieces/huracan_performante_spy/s/huracan_performante_spy_s_03.jpg" alt="Car 2" />
             <div className='car-overlay'>
               <div className='car-header'>
-                <h3>Lamborghini Huracan</h3>
+                <div>
+                  <small>LAMBORGINI</small>
+                  <h3>Huracan</h3>
+                </div>
                 <span>♥</span>
               </div>
 
               <div className='car-specs'>
                 <span>Automatic</span>
                 <span>Petrol</span>
+                <span>640 HP</span>
               </div>
 
               <div className='car-footer'>
-                <h4>$450/day</h4>
+                <div className='price'>
+                  <span>FROM</span>
+                  <h4>$450/day</h4>
+                </div>
                 <button>Rent Now</button>
               </div>
             </div>
@@ -90,17 +110,25 @@ function App() {
             <img src="https://hips.hearstapps.com/hmg-prod/images/2025-porsche-911-gt3-touring-005-a9200559-69529b961ef43.jpg?crop=0.571xw:0.482xh;0.168xw,0.360xh&resize=1200:*" alt="Car 3" />
             <div className='car-overlay'>
               <div className='car-header'>
-                <h3>Porsche 911</h3>
+                <div>
+                  <small>PORSCHE</small>
+                  <h3>911 Carrera</h3>
+                </div>
                 <span>♥</span>
               </div>
 
               <div className='car-specs'>
                 <span>Automatic</span>
                 <span>Petrol</span>
+                <span>701 HP</span>
+
               </div>
 
               <div className='car-footer'>
-                <h4>$400/day</h4>
+                <div className='price'>
+                  <span>FROM</span>
+                  <h4>$400/day</h4>
+                </div>
                 <button>Rent Now</button>
               </div>
             </div>
