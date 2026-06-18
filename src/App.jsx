@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   return (
     <div>
-      <nav className='container'>
+      <nav>
       <h2>RentX</h2>
       <div className='nav-buttons'>
         <button>Login</button>
