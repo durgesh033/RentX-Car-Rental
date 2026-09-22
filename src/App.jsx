@@ -3,22 +3,11 @@ import 'aos/dist/aos.css';
 import { useEffect, useState } from 'react';
 import './App.css';
 
-const cars = [
-  {
-    brand: 'FERRARI', name: 'F8 Tributo', image: 'https://imgd.aeplcdn.com/664x374/n/cw/ec/49376/f8-tributo-exterior-right-rear-three-quarter.jpeg?q=80',
-    specs: ['Automatic', 'Petrol', '710 HP'], price: 5000,
-  },
-  {
-    brand: 'LAMBORGHINI', name: 'Huracan', image: 'https://www.lamborghini.com/sites/it-en/files/DAM/lamborghini/masterpieces/huracan_performante_spy/s/huracan_performante_spy_s_03.jpg',
-    specs: ['Automatic', 'Petrol', '700 HP'], price: 6000,
-  },
-  {
-    brand: 'PORSCHE', name: '911 Carrera', image: 'https://hips.hearstapps.com/hmg-prod/images/2025-porsche-911-gt3-touring-005-a9200559-69529b961ef43.jpg?crop=0.571xw:0.482xh;0.168xw,0.360xh&resize=1200:*',
-    specs: ['Automatic', 'Petrol', '610 HP'], price: 4000,
-  },
-];
 
 function App() {
+  const [cars, setCars] = useState([]);
+  const [loadingCars, setLoadingCars] = useState(true);
+  const [carsError, setCarsError] = useState('');
   const [modal, setModal] = useState(null);
   const [selectedCar, setSelectedCar] = useState(null);
   const [favorites, setFavorites] = useState([]);
@@ -28,6 +17,42 @@ function App() {
 
   useEffect(() => {
     AOS.init({ duration: 700, once: true });
+  }, []);
+
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        setLoadingCars(true);
+        setCarsError('');
+
+        const response = await fetch('http://localhost:5000/api/cars');
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch cars');
+        }
+
+        const data = await response.json();
+
+        const formattedCars = data.map((car) => ({
+          id: car.id,
+          brand: car.brand,
+          name: car.name,
+          image: car.imageUrl,
+          price: car.pricePerDay,
+          specs: ['Automatic', 'Petrol'],
+          available: car.available,
+        }));
+
+        setCars(formattedCars);
+      } catch (error) {
+        console.error('Error fetching cars:', error);
+        setCarsError('Unable to load cars. Please try again later.');
+      } finally {
+        setLoadingCars(false);
+      }
+    };
+
+    fetchCars();
   }, []);
 
   const showToast = (message) => {
@@ -101,22 +126,76 @@ function App() {
           </div>
 
           <div className="car-grid">
-            {cars.map((car, index) => (
-              <div className="car-card" data-aos="zoom-in-up" data-aos-delay={index * 120} key={car.name}>
-                <img src={car.image} alt={car.name} />
-                <div className="car-overlay">
-                  <div className="car-header">
-                    <div><small>{car.brand}</small><h3>{car.name}</h3></div>
-                    <button className={`favorite ${favorites.includes(car.name) ? 'active' : ''}`} onClick={() => toggleFavorite(car.name)} aria-label="Favourite">♥</button>
-                  </div>
-                  <div className="car-specs">{car.specs.map((spec) => <span key={spec}>{spec}</span>)}</div>
-                  <div className="car-footer">
-                    <div className="price"><span>FROM</span><h4>₹{car.price.toLocaleString('en-IN')}/day</h4></div>
-                    <button className="rent-btn" onClick={() => openRent(car)}>Rent Now</button>
+            {loadingCars && (
+              <p className="loading-message">Loading premium vehicles...</p>
+            )}
+
+            {carsError && (
+              <p className="error-message">{carsError}</p>
+            )}
+
+            {!loadingCars && !carsError && cars.length === 0 && (
+              <p className="loading-message">
+                No cars are available right now.
+              </p>
+            )}
+
+            {!loadingCars &&
+              !carsError &&
+              cars.map((car, index) => (
+                <div
+                  className="car-card"
+                  data-aos="zoom-in-up"
+                  data-aos-delay={index * 120}
+                  key={car.id}
+                >
+                  <img
+                    src={car.image}
+                    alt={car.name}
+                  />
+
+                  <div className="car-overlay">
+                    <div className="car-header">
+                      <div>
+                        <small>{car.brand}</small>
+                        <h3>{car.name}</h3>
+                      </div>
+
+                      <button
+                        className={`favorite ${favorites.includes(car.name) ? 'active' : ''
+                          }`}
+                        onClick={() => toggleFavorite(car.name)}
+                        aria-label="Favourite"
+                      >
+                        ♥
+                      </button>
+                    </div>
+
+                    <div className="car-specs">
+                      {car.specs.map((spec) => (
+                        <span key={spec}>{spec}</span>
+                      ))}
+                    </div>
+
+                    <div className="car-footer">
+                      <div className="price">
+                        <span>FROM</span>
+                        <h4>
+                          ₹{car.price.toLocaleString('en-IN')}/day
+                        </h4>
+                      </div>
+
+                      <button
+                        className="rent-btn"
+                        onClick={() => openRent(car)}
+                        disabled={!car.available}
+                      >
+                        {car.available ? 'Rent Now' : 'Unavailable'}
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </section>
 
