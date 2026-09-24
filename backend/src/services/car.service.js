@@ -26,7 +26,28 @@ const getCarById = async (id) => {
 
 };
 
+const createCar = async({
+    name,
+    brand,
+    pricePerDay,
+    imageUrl,
+    available,
+}) => {
+    const car = await prisma.car.create({
+        data : {
+            name: name.trim(),
+            brand: brand.trim(),
+            pricePerDay,
+            imageUrl: imageUrl || null,
+            available: available ?? true,
+        },
+    });
+
+    return car;
+};
+
 module.exports = {
     getAllCars,
     getCarById,
+    createCar,
 };

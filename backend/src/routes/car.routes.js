@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.get("/", carController.getAllCars);
 router.get("/:id", carController.getCarById);
+router.post("/", carController.createCar);
 
 module.exports = router;
