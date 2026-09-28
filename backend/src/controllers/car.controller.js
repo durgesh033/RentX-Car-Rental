@@ -121,8 +121,132 @@ const createCar = async (req, res, next) => {
     }
 };
 
+const updateCar = async (req, res, next) => {
+    try {
+        const carId = Number(req.params.id);
+
+        if (!Number.isInteger(carId) || carId <= 0) {
+            const error = new Error("Invalid car ID");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const {
+            name,
+            brand,
+            pricePerDay,
+            imageUrl,
+            available,
+        } = req.body;
+
+        const updateData = {};
+
+        if (name !== undefined) {
+            if (
+                typeof name !== "string" ||
+                name.trim().length === 0
+            ) {
+                const error = new Error(
+                    "Name must be a non-empty string"
+                );
+
+                error.statusCode = 400;
+                throw error;
+            }
+
+            updateData.name = name.trim();
+        }
+
+        if (brand !== undefined) {
+            if (
+                typeof brand !== "string" ||
+                brand.trim().length === 0
+            ) {
+                const error = new Error(
+                    "Brand must be a non-empty string"
+                );
+
+                error.statusCode = 400;
+                throw error;
+            }
+
+            updateData.brand = brand.trim();
+        }
+
+        if (pricePerDay !== undefined) {
+            const parsedPrice = Number(pricePerDay);
+
+            if (
+                !Number.isInteger(parsedPrice) ||
+                parsedPrice <= 0
+            ) {
+                const error = new Error(
+                    "pricePerDay must be a positive integer"
+                );
+
+                error.statusCode = 400;
+                throw error;
+            }
+
+            updateData.pricePerDay = parsedPrice;
+        }
+
+        if (imageUrl !== undefined) {
+            if (
+                imageUrl !== null &&
+                typeof imageUrl !== "string"
+            ) {
+                const error = new Error(
+                    "imageUrl must be a string or null"
+                );
+
+                error.statusCode = 400;
+                throw error;
+            }
+
+            updateData.imageUrl = imageUrl;
+        }
+
+        if (available !== undefined) {
+            if (typeof available !== "boolean") {
+                const error = new Error(
+                    "available must be a boolean"
+                );
+
+                error.statusCode = 400;
+                throw error;
+            }
+
+            updateData.available = available;
+        }
+
+        if (Object.keys(updateData).length === 0) {
+            const error = new Error(
+                "At least one field is required for update"
+            );
+
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const car = await carService.updateCar(
+            carId,
+            updateData
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Car updated successfully",
+            car,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getAllCars,
     getCarById,
     createCar,
+    updateCar,
 };

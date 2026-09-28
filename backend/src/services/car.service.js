@@ -46,8 +46,32 @@ const createCar = async({
     return car;
 };
 
+const updateCar = async (id, updateData) => {
+    const existingCar = await prisma.car.findUnique({
+        where: {
+            id,
+        },
+    });
+
+    if(!existingCar) {
+        const error = new Error("Car not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    const updatedCar = await prisma.car.update({
+        where: {
+            id,
+        },
+        data: updateData,
+    });
+
+    return updatedCar;
+};
+
 module.exports = {
     getAllCars,
     getCarById,
     createCar,
+    updateCar,
 };
