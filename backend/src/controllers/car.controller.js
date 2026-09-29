@@ -244,9 +244,32 @@ const updateCar = async (req, res, next) => {
     }
 };
 
+const deleteCar = async (req, res, next) => {
+    try{
+        const carId = Number(req.params.id);
+
+        if(!Number.isInteger(carId) || carId <= 0) {
+            const error = new Error("Invalid car ID");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const car = await carService.deleteCar(carId);
+
+        res.status(200).json({
+            success: true,
+            message: "Car deleted successfully",
+            car,
+        }); 
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getAllCars,
     getCarById,
     createCar,
     updateCar,
+    deleteCar,
 };

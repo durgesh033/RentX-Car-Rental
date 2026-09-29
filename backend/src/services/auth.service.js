@@ -26,6 +26,7 @@ const registerUser = async ({ name, email, password }) => {
             name: name.trim(),
             email: normalizedEmail,
             password: hashedPassword,
+            role: "USER",
         },
         select: {
             id: true,
@@ -68,6 +69,7 @@ const loginUser = async ({ email, password }) => {
         {
             userId: user.id,
             email: user.email,
+            role: user.role,
         },
         JWT_SECRET,
         {
@@ -81,6 +83,7 @@ const loginUser = async ({ email, password }) => {
             id: user.id,
             name: user.name,
             email: user.email,
+            role: user.role,
         },
     };
 };
