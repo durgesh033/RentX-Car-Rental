@@ -5,6 +5,7 @@ const prisma = require("./db");
 const carRoutes = require("./routes/car.routes");
 const errorMiddleware = require("./middleware/error.middleware");
 const userRoutes = require("./routes/user.routes");
+const bookingRoutes = require("./routes/booking.routes");
 
 const authRoutes = require("./routes/auth.routes");
 
@@ -42,6 +43,9 @@ app.use("/api/auth", authRoutes);
 
 // User routes
 app.use("/api/users", userRoutes);
+
+//Booking routes
+app.use("/api/bookings", bookingRoutes);
 
 // Error middleware
 app.use(errorMiddleware);
