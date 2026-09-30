@@ -96,7 +96,85 @@ const getMyBookings = async (userId) => {
     return bookings;
 }
 
+// User can retrieve bookings if the bookings only belongs to them
+
+const getBookingById = async (bookingId, userId) => {
+    const booking = await prisma.booking.findUnique({
+        where: {
+            id: bookingId,
+        },
+        include: {
+            car: true,
+        },
+    });
+
+    if (!booking) {
+        const error = new Error("Booking not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    // User authentication
+    if (booking.userId !== userId) {
+        const error = new Error("You are not authorized to access the booking");
+        error.statusCode = 403;
+        throw error;
+    }
+    return booking;
+};
+
+const cancelBooking = async (bookingId, userId) => {
+    const booking = await prisma.booking.findUnique({
+        where: {
+            id: bookingId,
+        },
+    });
+
+    if (!booking) {
+        const error = new Error("Booking not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    //Only the booking owner can cancel it
+    if (booking.userId !== userId) {
+        const error = new Error("You are not authorized to cancel this booking");
+        error.statusCode = 403;
+        throw error;
+    }
+
+    // Cannot cancel an already cancelled booking
+    if (booking.status === "CANCELLED") {
+        const error = new Error("Booking is already cancelled");
+        error.statusCode = 409;
+        throw error;
+    }
+
+    // Cannot cancel a completed booking
+    if (booking.status === "COMPLETED") {
+        const error = new Error("Completed bookings cannot be cancelled");
+        error.statusCode = 409;
+        throw error;
+    }
+
+    const cancelledBooking = await prisma.booking.update({
+        where: {
+            id: bookingId,
+        },
+        data: {
+            status: "CANCELLED",
+        },
+        include: {
+            car: true,
+        },
+    });
+
+    return cancelledBooking;
+};
+
 module.exports = {
     createBooking,
     getMyBookings,
+    getBookingById,
+    cancelBooking,
 };

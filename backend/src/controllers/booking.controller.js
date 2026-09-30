@@ -102,7 +102,64 @@ const getMyBookings = async (req, res, next) => {
     }
 };
 
+// Booking belongs to user
+const getBookingById = async (req, res, next) => {
+    try{
+        const bookingId = Number(req.params.id);
+
+        if (!Number.isInteger(bookingId) || bookingId <= 0) {
+            const error = new Error("Invalid booking ID");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const userId = req.user.userId;
+
+        const booking = await bookingService.getBookingById(
+            bookingId,
+            userId
+        );
+
+        res.status(200).json({
+            success: true,
+            booking,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+//Cancel the booking
+const cancelBooking = async (req, res, next) => {
+    try {
+        const bookingId = Number(req.params.id);
+
+        if (!Number.isInteger(bookingId) || bookingId <= 0) {
+            const error = new Error("Invalid booing ID");
+            error.statusCode = 400;
+            throw error;
+        }
+        
+        const userId = req.user.userId;
+        
+        const booking = await bookingService.cancelBooking(
+            bookingId,
+            userId
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Booking cancelled succesfully",
+            booking,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createBooking,
     getMyBookings,
+    getBookingById,
+    cancelBooking,
 };
