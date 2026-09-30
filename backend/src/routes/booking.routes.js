@@ -20,6 +20,13 @@ router.get(
 );
 
 router.get(
+    "/admin",
+    authMiddleware,
+    adminMiddleware,
+    bookingController.getAllBookings
+);
+
+router.get(
     "/:id",
     authMiddleware,
     bookingController.getBookingById
@@ -37,6 +44,7 @@ router.patch(
     adminMiddleware,
     bookingController.updateBookingStatus
 );
+
 
 module.exports = router;
 

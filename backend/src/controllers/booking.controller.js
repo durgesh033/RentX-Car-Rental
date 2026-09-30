@@ -196,10 +196,25 @@ const updateBookingStatus = async (req, res, next) => {
     }
 };
 
+const getAllBookings = async (req, res, next) => {
+    try{
+        const bookings = await bookingService.getAllBookings();
+
+        res.status(200).json({
+            success: true,
+            count: bookings.length,
+            bookings,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createBooking,
     getMyBookings,
     getBookingById,
     cancelBooking,
     updateBookingStatus,
+    getAllBookings,
 };

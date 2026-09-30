@@ -234,10 +234,32 @@ const updateBookingStatus = async (bookingId, newStatus) => {
     return updatedBooking;
 };
 
+const getAllBookings = async () => {
+    const bookings = await prisma.booking.findMany({
+        include: {
+            car: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                },
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    return bookings;
+};
+
 module.exports = {
     createBooking,
     getMyBookings,
     getBookingById,
     cancelBooking,
     updateBookingStatus,
+    getAllBookings,
 };
