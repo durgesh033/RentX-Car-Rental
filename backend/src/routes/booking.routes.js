@@ -11,5 +11,11 @@ router.post(
     bookingController.createBooking
 );
 
+router.get(
+    "/",
+    authMiddleware,
+    bookingController.getMyBookings
+);
+
 module.exports = router;
 

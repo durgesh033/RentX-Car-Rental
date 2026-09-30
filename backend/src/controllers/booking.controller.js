@@ -61,6 +61,12 @@ const createBooking = async (req, res, next) => {
             throw error;
         }
 
+        if (parsedReturnDate <= parsedPickupDate) {
+            const error = new Error("Return date must be after pickup date");
+            error.statusCode = 400;
+            throw error;
+        }
+
         // User ID comes from JWT
         const userId = req.user.userId;
 
@@ -81,6 +87,22 @@ const createBooking = async (req, res, next) => {
     }
 };
 
+const getMyBookings = async (req, res, next) => {
+    try{
+        const userId = req.user.userId;
+        const bookings = await bookingService.getMyBookings(userId);
+
+        res.status(200).json({
+            success: true,
+            count: bookings.length,
+            bookings,
+        });
+    } catch(error) {
+            next(error);
+    }
+};
+
 module.exports = {
     createBooking,
+    getMyBookings,
 };

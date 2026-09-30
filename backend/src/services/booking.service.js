@@ -26,7 +26,7 @@ const createBooking = async ({
 
     // Check whether the car is available
     if (!car.available) {
-        const error =new Error("Car is not currently unavailavle");
+        const error =new Error("Car is currently unavailavle");
         error.statusCode = 400;
         throw error;
     }
@@ -79,6 +79,24 @@ const createBooking = async ({
     return booking;
 };
 
+// User retrieve own bookings
+const getMyBookings = async (userId) => {
+    const bookings = await prisma.booking.findMany({
+        where: {
+            userId,
+        },
+        include: {
+            car: true,
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    return bookings;
+}
+
 module.exports = {
     createBooking,
+    getMyBookings,
 };
