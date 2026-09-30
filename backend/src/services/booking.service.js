@@ -172,9 +172,72 @@ const cancelBooking = async (bookingId, userId) => {
     return cancelledBooking;
 };
 
+const updateBookingStatus = async (bookingId, newStatus) => {
+    const booking = await prisma.booking.findUnique({
+        where: {
+            id: bookingId,
+        },
+    });
+
+    if(!booking) {
+        const error = new Error("Booking not found");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    // Validate the requested status
+    const allowedStatuses = [
+        "PENDING",
+        "CONFIRMED",
+        "CANCELLED",
+        "COMPLETED"
+    ];
+
+    if(!allowedStatuses.includes(newStatus)) {
+        const error = new Error("Invalid booking status");
+        error.statusCode = 400;
+        throw error;
+    }
+
+    //Prevent changing a cancelled booking
+    if (booking.status === "CANCELLED") {
+        const error = new Error("Cancelled bookings cannot be changed");
+        error.statusCode = 409;
+        throw error;
+    }
+
+    //prevent changing a confirmed booking 
+    if (booking.status === "COMPLETED") {
+        const error = new Error("Completed bookings cannot be changed");
+        error.statusCode = 409;
+        throw error;
+    }
+
+    const updatedBooking = await prisma.booking.update({
+        where: {
+            id: bookingId,
+        },
+        data: {
+            status: newStatus,
+        },
+        include: {
+            car: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+    return updatedBooking;
+};
+
 module.exports = {
     createBooking,
     getMyBookings,
     getBookingById,
     cancelBooking,
+    updateBookingStatus,
 };

@@ -157,9 +157,49 @@ const cancelBooking = async (req, res, next) => {
     }
 };
 
+const updateBookingStatus = async (req, res, next) => {
+    try{
+        const bookingId = Number(req.params.id);
+
+        if(!Number.isInteger(bookingId) || bookingId <= 0) {
+            const error = new Error("Invalid booking Id");
+            error.statusCode = 400;
+            throw error;
+        } 
+
+        const {status} = req.body;
+
+        if (!status) {
+            const error = new Error("Booking status is required");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        if (typeof status !== "string"){
+            const error = new Error("Booking status must be a string");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const booking = await bookingService.updateBookingStatus(
+            bookingId,
+            status
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Booking status updated succesfully",
+            booking,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createBooking,
     getMyBookings,
     getBookingById,
     cancelBooking,
+    updateBookingStatus,
 };
