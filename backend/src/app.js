@@ -1,7 +1,10 @@
 const express = require("express");
 const cors = require("cors");
+const swaggerUi = require("swagger-ui-express");
 
 const prisma = require("./db");
+const swaggerSpec = require("./config/swagger");
+
 const carRoutes = require("./routes/car.routes");
 const errorMiddleware = require("./middleware/error.middleware");
 const userRoutes = require("./routes/user.routes");
@@ -34,6 +37,13 @@ app.get("/api/health", async (req, res, next) => {
         next(error);
     }
 });
+
+//Swagger 
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec)
+);
 
 // Car routes
 app.use("/api/cars", carRoutes);

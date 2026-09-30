@@ -199,17 +199,18 @@ const updateBookingStatus = async (bookingId, newStatus) => {
         throw error;
     }
 
-    //Prevent changing a cancelled booking
-    if (booking.status === "CANCELLED") {
-        const error = new Error("Cancelled bookings cannot be changed");
-        error.statusCode = 409;
-        throw error;
-    }
+    const allowedTransitions = {
+        PENDING: ["CONFIRMED", "CANCELLED"],
+        CONFIRMED: ["COMPLETED", "CANCELLED"],
+        CANCELLED: [],
+        COMPLETED: [],
+    };
 
-    //prevent changing a confirmed booking 
-    if (booking.status === "COMPLETED") {
-        const error = new Error("Completed bookings cannot be changed");
-        error.statusCode = 409;
+    const allowedNextStatuses = allowedTransitions[booking.status];
+
+    if(!allowedNextStatuses.includes(newStatus)) {
+        const error = new Error(`Cannot change booking status from ${booking.status} to ${newStatus} `);
+        error.statusCode = 400;
         throw error;
     }
 
